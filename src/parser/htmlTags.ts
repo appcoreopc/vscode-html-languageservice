@@ -57,6 +57,13 @@ export interface ITagSet {
 	[tag: string]: HTMLTagSpecification;
 }
 
+export interface IGlobalAttributeSet {
+	[attribute: string]: {
+		name: string,
+		description: string
+	};
+}
+
 export class HTMLTagSpecification {
 	constructor(public label: string, public attributes: string[] = []) { }
 }

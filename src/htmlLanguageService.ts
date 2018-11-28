@@ -16,7 +16,7 @@ import { TextDocument, Position, CompletionList, Hover, Range, SymbolInformation
 import { Scanner, HTMLDocument, CompletionConfiguration, ICompletionParticipant, HTMLFormatConfiguration, DocumentContext } from './htmlLanguageTypes';
 import { getFoldingRanges } from './services/htmlFolding';
 import { ITagSet } from './parser/htmlTags';
-import { addTagDefinitions } from './services/tagProviders';
+import { addTags, addGlobalAttributes } from './services/tagProviders';
 
 export * from './htmlLanguageTypes';
 export * from 'vscode-languageserver-types';
@@ -33,7 +33,8 @@ export interface LanguageService {
 	findDocumentSymbols(document: TextDocument, htmlDocument: HTMLDocument): SymbolInformation[];
 	doTagComplete(document: TextDocument, position: Position, htmlDocument: HTMLDocument): string | null;
 	getFoldingRanges(document: TextDocument, context?: { rangeLimit?: number }): FoldingRange[];
-	addTagDefinitions(tagDefinitions: ITagSet): void;
+	addTags(tags: ITagSet): void;
+	addGlobalAttributes(globalAttributes: any[]): void;
 }
 
 export function getLanguageService(): LanguageService {
@@ -50,6 +51,7 @@ export function getLanguageService(): LanguageService {
 		findDocumentSymbols,
 		getFoldingRanges,
 		doTagComplete: htmlCompletion.doTagComplete.bind(htmlCompletion),
-		addTagDefinitions(tagDefinitions) { addTagDefinitions(tagDefinitions) }
+		addTags(tags: ITagSet) { addTags(tags); },
+		addGlobalAttributes(globalAttributes: any[]) { addGlobalAttributes(globalAttributes); }
 	};
 }

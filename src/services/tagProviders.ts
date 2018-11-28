@@ -46,12 +46,24 @@ export function getAllTagProviders() {
 export function addTagProviders(tagProviders: IHTMLTagProvider[]) {
   return defaultCollection.addTagProviders(tagProviders);
 }
-export function addTagDefinitions(tagSet: ITagSet) {
+export function addTags(tagSet: ITagSet) {
   const provider: IHTMLTagProvider = {
     getId: () => 'wc',
     isApplicable: () => true,
     collectTags: (collector: (tag: string, label: string) => void) => collectTagsDefault(collector, tagSet),
-    collectAttributes: (tag: string, collector: (attribute: string, type?: string) => void) => { collectAttributesDefault(tag, collector, tagSet, []) },
+    collectAttributes: (tag: string, collector: (attribute: string, type?: string) => void) => { collectAttributesDefault(tag, collector, tagSet, []); },
+    collectValues: (tag: string, attribute: string, collector: (value: string) => void) => {}
+  };
+  defaultCollection.addTagProviders([provider]);
+}
+
+export function addGlobalAttributes(globalAttributes: any[]) {
+  const plainGlobalAttributes = globalAttributes.map(ga => ga.name);
+  const provider: IHTMLTagProvider = {
+    getId: () => 'wc-attrs',
+    isApplicable: () => true,
+    collectTags: (collector: (tag: string, label: string) => void) => {},
+    collectAttributes: (tag: string, collector: (attribute: string, type?: string) => void) => { collectAttributesDefault(tag, collector, {}, plainGlobalAttributes); },
     collectValues: (tag: string, attribute: string, collector: (value: string) => void) => {}
   };
   defaultCollection.addTagProviders([provider]);
